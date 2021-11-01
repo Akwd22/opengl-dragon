@@ -1,3 +1,9 @@
+/**
+ * @file main.cpp
+ * @brief Fichier responsable de l'initialisation d'OpenGL et de ses bibliothèques.
+ * Définir les paramètres de rendu, de la caméra, de la gestion de la fenêtre ainsi que des interactions IHM (clavier, souris, etc.).
+ */
+
 #include <iostream>
 
 #ifdef __APPLE__
