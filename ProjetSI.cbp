@@ -41,6 +41,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="consts.h" />
+		<Unit filename="cube.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>
