@@ -1,0 +1,6 @@
+#ifndef CONSTS_H_INCLUDED
+#define CONSTS_H_INCLUDED
+
+#define MAIN_CUBE 0
+
+#endif // CONSTS_H_INCLUDED

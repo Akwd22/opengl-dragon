@@ -1,4 +1,5 @@
 #include <iostream>
+#include "consts.h"
 
 using namespace std;
 
@@ -18,8 +19,10 @@ using namespace std;
 *   - Au moins 1 animation automatique.
 */
 
+#if MAIN_CUBE == 0
 int main(int argc, char** argv)
 {
     cout << "Hello world!" << endl;
     return 0;
 }
+#endif // MAIN_CUBE
