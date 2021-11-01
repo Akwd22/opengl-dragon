@@ -1,9 +1,9 @@
 #include <iostream>
 
 #ifdef __APPLE__
-    #include <GLUT/glut.h>  // Pour Mac OS X.
+#include <GLUT/glut.h> // Pour Mac OS X.
 #else
-    #include <GL/glut.h>    // Pour les autres systèmes.
+#include <GL/glut.h> // Pour les autres systèmes.
 #endif
 
 #include "consts.h"
@@ -27,13 +27,25 @@ using namespace std;
 */
 
 /*
-* NOTES :
+* NOTE :
 *   - 1 type de lumière au niveau des 2 yeux du dragon.
 *   - 1 type de lumière ambiante.
 */
 
-void initGlut(int* argc, char** argv);
+/* -------------------------------------------------------------------------- */
+/*                                 Définitions                                */
+/* -------------------------------------------------------------------------- */
+
+/* ----------------------------- Initialisations ---------------------------- */
+
+void initGlut(int *argc, char **argv);
 void initGl();
+
+/* ------------------------ Fonctions de dispositions ----------------------- */
+
+void displayCamera();
+
+/* -------------------------- Fonctions de rappels -------------------------- */
 
 void displayHandler();
 void reshapeHandler(int l, int h);
@@ -43,38 +55,70 @@ void motionHandler(int x, int y);
 void specialHandler(int touche, int x, int y);
 void idleHandler();
 
-float fovCamera = 50.0; // Zoom caméra.
-float fovCameraStep = 1.0;
+/* -------------------------------------------------------------------------- */
+/*                             Variables globales                             */
+/* -------------------------------------------------------------------------- */
 
-float angleCameraY = 0.0; // Rotation caméra autour axe Y.
-float angleCameraYStep = 1.0;
+/* --------------------------------- Fenêtre -------------------------------- */
 
-float angleCameraX = 0.0; // Rotation caméra autour axe X.
-float angleCameraXStep = 1.0;
+/// Largeur de la fenêtre.
+unsigned int winWidth;
+/// Hauteur de la fenêtre.
+unsigned int winHeight;
 
+/// Dernière position X du curseur.
 int oldY;
+/// Dernière position Y du curseur.
 int oldX;
 
-int winWidth;
-int winHeight;
+/// Bouton de la souris enfoncé (-1 si aucun).
+int mousePressedButton = -1;
 
-int mousePressedButton = -1; // -1 <=> aucun bouton pressé
+/* --------------------------------- Caméra --------------------------------- */
+
+/// Angle FOV de la caméra (pour le zoom).
+float fovCamera = 50.0;
+/// Pas de modification du FOV de la caméra.
+float fovCameraStep = 1.0;
+
+/// Angle de rotation caméra autour de l'axe Y.
+float angleCameraY = 0.0;
+/// Angle de rotation caméra autour de l'axe X.
+float angleCameraX = 0.0;
+/// Pas de modification de la rotation caméra autour d'un axe.
+float angleCameraStep = 1.0;
+
+/* -------------------------------------------------------------------------- */
+/*                                    Main                                    */
+/* -------------------------------------------------------------------------- */
 
 #if MAIN_CUBE == 0
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     initGlut(&argc, argv);
     return 0;
 }
 #endif // MAIN_CUBE
 
-void initGlut(int* argc, char** argv)
+/* -------------------------------------------------------------------------- */
+/*                               Implémentations                              */
+/* -------------------------------------------------------------------------- */
+
+/* ----------------------------- Initialisations ---------------------------- */
+
+/**
+ * @brief Initialiser la bibliothèque GLUT.
+ * Créer la fenêtre et définir les fonctions de rappels.
+ * @param argc Nombre d'arguments passé au programme.
+ * @param argv Arguments passés au programme.
+ */
+void initGlut(int *argc, char **argv)
 {
     // Initialisation fenêtre.
     glutInit(argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
     glutInitWindowSize(500, 500);
-    glutInitWindowPosition(2200, 200);
+    glutInitWindowPosition(2200, 200); // TODO : attention remettre la largeur normalement pour un mono-screen.
     glutCreateWindow("Projet SI");
 
     // Initialiser OpenGL.
@@ -93,31 +137,54 @@ void initGlut(int* argc, char** argv)
     glutMainLoop();
 }
 
+/**
+ * @brief Initialiser la bibliothèque OpenGL.
+ * Définir les paramètres de rendu.
+ */
 void initGl()
 {
     glClearColor(0.0, 0.0, 0.0, 0.0); // Couleur du fond.
-    glColor3f(1.0, 1.0, 1.0); // Couleur des tracés.
+    glColor3f(1.0, 1.0, 1.0);         // Couleur des tracés.
 
     glPointSize(2.0);
 
     glEnable(GL_DEPTH_TEST);
 }
 
+/* ------------------------ Fonctions de dispositions ----------------------- */
+
+/**
+ * @brief Afficher et placer la caméra.
+ */
+void displayCamera()
+{
+    // Zoom de la caméra.
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(fovCamera, (float)winWidth / (float)winHeight, 1.0, 10.0);
+
+    // Position de la caméra.
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+    // Rotation de la caméra.
+    glRotatef(angleCameraY, 0.0, 1.0, 0.0);
+    glRotatef(angleCameraX, 1.0, 0.0, 0.0);
+}
+
+/* --------------------------- Fonctions de rappel -------------------------- */
+
+/**
+ * @brief Fonction de rappel pour l'affichage de la scène.
+ * Afficher les objets 3D sur la scène, effectuer les transformations, etc.
+ */
 void displayHandler()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glShadeModel(GL_SMOOTH);
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(fovCamera, (float) winWidth/ (float) winHeight, 1.0, 10.0);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-
-    glRotatef(angleCameraY, 0.0, 1.0, 0.0);
-    glRotatef(angleCameraX, 1.0, 0.0, 0.0);
+    displayCamera();
 
     glutSolidTeapot(1.0);
 
@@ -125,6 +192,11 @@ void displayHandler()
     glutSwapBuffers();
 };
 
+/**
+ * @brief Fonction de rappel lors du redimensionnement de la fenêtre.
+ * @param l Nouvelle largeur de fenêtre.
+ * @param h Nouvelle hauteur de fenêtre.
+ */
 void reshapeHandler(int l, int h)
 {
     cout << "Window reshaped with new width: " << l << " and height: " << h << endl;
@@ -135,46 +207,59 @@ void reshapeHandler(int l, int h)
     winHeight = h;
 };
 
+/**
+ * @brief Fonction de rappel lors de l'appuie d'une touche ASCII.
+ * @param touche Caractère ASCII de la touche appuyée.
+ * @param x Position X du curseur au moment de l'appuie.
+ * @param y Position Y du curseur au moment de l'appuie.
+ */
 void keyboardHandler(unsigned char touche, int x, int y)
 {
     cout << "Key pressed: " << touche << " at X: " << x << " Y: " << y << endl;
 
     switch (touche)
     {
-        case 'Z':
-            fovCamera -= fovCameraStep;
-            break;
-        case 'z':
-            fovCamera += fovCameraStep;
-            break;
-        case 'p': // Affichage mode plein.
-            glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-            break;
-        case 'f': // Affichage mode fil de fer.
-            glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-            break;
-        case 's' : // Affichage en mode sommets seuls.
-            glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
-            break;
-        case 'd':
-            glEnable(GL_DEPTH_TEST);
-            break;
-        case 'D':
-            glDisable(GL_DEPTH_TEST);
-            break;
-        case 'a':
-            glPolygonMode(GL_FRONT, GL_FILL);
-            glPolygonMode(GL_FRONT, GL_LINE);
+    case 'Z': // Zoomer la caméra.
+        fovCamera -= fovCameraStep;
+        break;
+    case 'z': // Dézoomer la caméra.
+        fovCamera += fovCameraStep;
+        break;
+    case 'p': // Affichage mode plein.
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        break;
+    case 'f': // Affichage mode fil de fer.
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        break;
+    case 's': // Affichage en mode sommets seuls.
+        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+        break;
+    case 'd':
+        glEnable(GL_DEPTH_TEST);
+        break;
+    case 'D':
+        glDisable(GL_DEPTH_TEST);
+        break;
+    case 'a':
+        glPolygonMode(GL_FRONT, GL_FILL);
+        glPolygonMode(GL_FRONT, GL_LINE);
         break;
     }
 
     glutPostRedisplay();
 };
 
+/**
+ * @brief Fonction de rappel lors de l'appuie d'un bouton souris.
+ * @param bouton Bouton de la souris appuyé.
+ * @param etat État du bouton appuyé (enfoncé ou relaché).
+ * @param x Position X du curseur au moment de l'appuie.
+ * @param y Position Y du curseur au moment de l'appuie.
+ */
 void mouseHandler(int bouton, int etat, int x, int y)
 {
-    #define GLUT_SCROLL_UP 3
-    #define GLUT_SCROLL_DOWN 4
+#define GLUT_SCROLL_UP 3
+#define GLUT_SCROLL_DOWN 4
 
     cout << "Mouse button pressed: " << bouton << " with state: " << etat << " at X: " << x << " Y: " << y << endl;
 
@@ -182,31 +267,38 @@ void mouseHandler(int bouton, int etat, int x, int y)
 
     switch (bouton)
     {
-        case GLUT_LEFT_BUTTON:
-            oldY = y;
-            oldX = x;
-            break;
-        case GLUT_SCROLL_UP:
-            if (etat == GLUT_UP) fovCamera -= fovCameraStep;
-            break;
-        case GLUT_SCROLL_DOWN:
-            if (etat == GLUT_UP) fovCamera += fovCameraStep;
-            break;
+    case GLUT_LEFT_BUTTON:
+        oldY = y;
+        oldX = x;
+        break;
+    case GLUT_SCROLL_UP: // Zoomer la caméra.
+        if (etat == GLUT_UP)
+            fovCamera -= fovCameraStep;
+        break;
+    case GLUT_SCROLL_DOWN: // Dézoomer la caméra.
+        if (etat == GLUT_UP)
+            fovCamera += fovCameraStep;
+        break;
     }
 
     glutPostRedisplay();
 };
 
+/**
+ * @brief Fonction de rappel lors du déplacement du curseur avec une touche enfoncée.
+ * @param x Position X du curseur.
+ * @param y Position Y du curseur.
+ */
 void motionHandler(int x, int y)
 {
     cout << "Mouse moved while the button: " << mousePressedButton << " is pressed at X: " << x << " Y: " << y << endl;
 
     switch (mousePressedButton)
     {
-        case GLUT_LEFT_BUTTON:
-            angleCameraY += x - oldX;
-            angleCameraX += y - oldY;
-            break;
+    case GLUT_LEFT_BUTTON: // Rotationner la caméra.
+        angleCameraY += x - oldX;
+        angleCameraX += y - oldY;
+        break;
     }
 
     oldY = y;
@@ -215,29 +307,37 @@ void motionHandler(int x, int y)
     glutPostRedisplay();
 };
 
+/**
+ * @brief Fonction de rappel lors de l'appuie d'une touche non-ASCII.
+ * @param touche Code non-ASCII de la touche appuyée.
+ * @param x Position X du curseur au moment de l'appuie.
+ * @param y Position Y du curseur au moment de l'appuie.
+ */
 void specialHandler(int touche, int x, int y)
 {
     cout << "Non-ASCII key pressed: " << touche << " at X: " << x << " Y: " << y << endl;
 
     switch (touche)
     {
-        case GLUT_KEY_LEFT:
-            angleCameraY -= angleCameraYStep;
-            break;
-        case GLUT_KEY_RIGHT:
-            angleCameraY += angleCameraYStep;
-            break;
-        case GLUT_KEY_UP:
-            angleCameraX -= angleCameraXStep;
-            break;
-        case GLUT_KEY_DOWN:
-            angleCameraX += angleCameraXStep;
-            break;
+    case GLUT_KEY_LEFT: // Rotationner la caméra à droite.
+        angleCameraY -= angleCameraStep;
+        break;
+    case GLUT_KEY_RIGHT: // Rotationner la caméra à gauche.
+        angleCameraY += angleCameraStep;
+        break;
+    case GLUT_KEY_UP: // Rotationner la caméra en bas.
+        angleCameraX -= angleCameraStep;
+        break;
+    case GLUT_KEY_DOWN: // Rotationner la caméra en haut.
+        angleCameraX += angleCameraStep;
+        break;
     }
 
     glutPostRedisplay();
 };
 
-void idleHandler()
-{
-};
+/**
+ * @brief Fonction de rappel lorsque inactif.
+ * Effectuer les animations automatiques des objets.
+ */
+void idleHandler(){};
