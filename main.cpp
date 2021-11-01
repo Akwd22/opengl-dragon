@@ -1,9 +1,9 @@
 #include <iostream>
 
 #ifdef __APPLE__
-    #include <GLUT/glut.h> /* Pour Mac OS X */
+    #include <GLUT/glut.h>  // Pour Mac OS X.
 #else
-    #include <GL/glut.h>   /* Pour les autres systèmes */
+    #include <GL/glut.h>    // Pour les autres systèmes.
 #endif
 
 #include "consts.h"
@@ -16,8 +16,8 @@ using namespace std;
 *   - Modéliser au moins 1 primitive à partir de sa représentation paramétrique.
 *   - Utiliser au moins 2 textures : une plaquée sur une face, l'autre enroulée autour d'une primitive.
 *   - Gérer au moins 2 types de lumières.
-*   - Zoomer la caméra avec les touches 'z' et 'Z'.
-*   - Touches directionnelles :
+*   # Zoomer la caméra avec les touches 'z' et 'Z'.
+*   # Touches directionnelles :
 *       * tourner autour du dragon par la droite (flèche gauche);
 *       * tourner autour du dragon par la gauche (flèche droite);
 *       * tourner autour du dragon par le bas (flèche haute);
@@ -28,7 +28,8 @@ using namespace std;
 
 /*
 * NOTES :
-*   - Hauteur : axe Y.
+*   - 1 type de lumière au niveau des 2 yeux du dragon.
+*   - 1 type de lumière ambiante.
 */
 
 void initGlut(int* argc, char** argv);
@@ -42,8 +43,19 @@ void motionHandler(int x, int y);
 void specialHandler(int touche, int x, int y);
 void idleHandler();
 
-float fovCamera = 50.0;
+float fovCamera = 50.0; // Zoom caméra.
 float fovCameraStep = 1.0;
+
+float angleCameraY = 0.0; // Rotation caméra autour axe Y.
+float angleCameraYStep = 1.0;
+
+float angleCameraX = 0.0; // Rotation caméra autour axe X.
+float angleCameraXStep = 1.0;
+
+int oldY;
+int oldX;
+
+int mousePressedButton = -1; // -1 <=> aucun bouton pressé
 
 #if MAIN_CUBE == 0
 int main(int argc, char** argv)
@@ -101,7 +113,9 @@ void displayHandler()
     glLoadIdentity();
     gluLookAt(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
-    glTranslatef(0.0, 0.0, 0.0);
+    glRotatef(angleCameraY, 0.0, 1.0, 0.0);
+    glRotatef(angleCameraX, 1.0, 0.0, 0.0);
+
     glutSolidTeapot(1.0);
 
     glFlush();
@@ -121,13 +135,14 @@ void keyboardHandler(unsigned char touche, int x, int y)
 
     switch (touche)
     {
-        case '+':
-            cout << "Zoom+" << endl;
-            fovCamera -= 0.1;
+        case 'Z':
+            fovCamera -= fovCameraStep;
             break;
-        case '-' :
-            cout << "Zoom-" << endl;
-            fovCamera += 0.1;
+        case 'z':
+            fovCamera += fovCameraStep;
+            break;
+        case 'f': // Mode fil de fer.
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             break;
     }
 
@@ -141,8 +156,14 @@ void mouseHandler(int bouton, int etat, int x, int y)
 
     cout << "Mouse button pressed: " << bouton << " with state: " << etat << " at X: " << x << " Y: " << y << endl;
 
+    mousePressedButton = etat == GLUT_DOWN ? bouton : -1;
+
     switch (bouton)
     {
+        case GLUT_LEFT_BUTTON:
+            oldY = y;
+            oldX = x;
+            break;
         case GLUT_SCROLL_UP:
             if (etat == GLUT_UP) fovCamera -= fovCameraStep;
             break;
@@ -156,12 +177,43 @@ void mouseHandler(int bouton, int etat, int x, int y)
 
 void motionHandler(int x, int y)
 {
-    cout << "Mouse moved while button is pressed at X: " << x << " Y: " << y << endl;
+    cout << "Mouse moved while the button: " << mousePressedButton << " is pressed at X: " << x << " Y: " << y << endl;
+
+    switch (mousePressedButton)
+    {
+        case GLUT_LEFT_BUTTON:
+            angleCameraY += x - oldX;
+            angleCameraX += y - oldY;
+            break;
+    }
+
+    oldY = y;
+    oldX = x;
+
+    glutPostRedisplay();
 };
 
 void specialHandler(int touche, int x, int y)
 {
     cout << "Non-ASCII key pressed: " << touche << " at X: " << x << " Y: " << y << endl;
+
+    switch (touche)
+    {
+        case GLUT_KEY_LEFT:
+            angleCameraY -= angleCameraYStep;
+            break;
+        case GLUT_KEY_RIGHT:
+            angleCameraY += angleCameraYStep;
+            break;
+        case GLUT_KEY_UP:
+            angleCameraX -= angleCameraXStep;
+            break;
+        case GLUT_KEY_DOWN:
+            angleCameraX += angleCameraXStep;
+            break;
+    }
+
+    glutPostRedisplay();
 };
 
 void idleHandler()
