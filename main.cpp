@@ -42,6 +42,9 @@ void motionHandler(int x, int y);
 void specialHandler(int touche, int x, int y);
 void idleHandler();
 
+float fovCamera = 50.0;
+float fovCameraStep = 1.0;
+
 #if MAIN_CUBE == 0
 int main(int argc, char** argv)
 {
@@ -88,8 +91,18 @@ void initGl()
 void displayHandler()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glShadeModel(GL_SMOOTH);
 
-    glutSolidTeapot(0.5);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(fovCamera, 1.0, 1.0, 10.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+    glTranslatef(0.0, 0.0, 0.0);
+    glutSolidTeapot(1.0);
 
     glFlush();
     glutSwapBuffers();
@@ -98,16 +111,47 @@ void displayHandler()
 void reshapeHandler(int l, int h)
 {
     cout << "Window reshaped with new width: " << l << " and height: " << h << endl;
+
+    glutPostRedisplay();
 };
 
 void keyboardHandler(unsigned char touche, int x, int y)
 {
     cout << "Key pressed: " << touche << " at X: " << x << " Y: " << y << endl;
+
+    switch (touche)
+    {
+        case '+':
+            cout << "Zoom+" << endl;
+            fovCamera -= 0.1;
+            break;
+        case '-' :
+            cout << "Zoom-" << endl;
+            fovCamera += 0.1;
+            break;
+    }
+
+    glutPostRedisplay();
 };
 
 void mouseHandler(int bouton, int etat, int x, int y)
 {
+    #define GLUT_SCROLL_UP 3
+    #define GLUT_SCROLL_DOWN 4
+
     cout << "Mouse button pressed: " << bouton << " with state: " << etat << " at X: " << x << " Y: " << y << endl;
+
+    switch (bouton)
+    {
+        case GLUT_SCROLL_UP:
+            if (etat == GLUT_UP) fovCamera -= fovCameraStep;
+            break;
+        case GLUT_SCROLL_DOWN:
+            if (etat == GLUT_UP) fovCamera += fovCameraStep;
+            break;
+    }
+
+    glutPostRedisplay();
 };
 
 void motionHandler(int x, int y)
