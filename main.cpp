@@ -55,6 +55,9 @@ float angleCameraXStep = 1.0;
 int oldY;
 int oldX;
 
+int winWidth;
+int winHeight;
+
 int mousePressedButton = -1; // -1 <=> aucun bouton pressé
 
 #if MAIN_CUBE == 0
@@ -107,7 +110,7 @@ void displayHandler()
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(fovCamera, 1.0, 1.0, 10.0);
+    gluPerspective(fovCamera, (float) winWidth/ (float) winHeight, 1.0, 10.0);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -126,7 +129,10 @@ void reshapeHandler(int l, int h)
 {
     cout << "Window reshaped with new width: " << l << " and height: " << h << endl;
 
-    glutPostRedisplay();
+    glViewport(0, 0, l, h);
+
+    winWidth = l;
+    winHeight = h;
 };
 
 void keyboardHandler(unsigned char touche, int x, int y)
