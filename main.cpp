@@ -141,9 +141,25 @@ void keyboardHandler(unsigned char touche, int x, int y)
         case 'z':
             fovCamera += fovCameraStep;
             break;
-        case 'f': // Mode fil de fer.
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        case 'p': // Affichage mode plein.
+            glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
             break;
+        case 'f': // Affichage mode fil de fer.
+            glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+            break;
+        case 's' : // Affichage en mode sommets seuls.
+            glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
+            break;
+        case 'd':
+            glEnable(GL_DEPTH_TEST);
+            break;
+        case 'D':
+            glDisable(GL_DEPTH_TEST);
+            break;
+        case 'a':
+            glPolygonMode(GL_FRONT, GL_FILL);
+            glPolygonMode(GL_FRONT, GL_LINE);
+        break;
     }
 
     glutPostRedisplay();
