@@ -68,3 +68,40 @@ void sphere(const double rayon)
         glEnd();
     }
 }
+
+void parallelepipede(const double longueur, const double largeur, const double hauteur) {
+    glPushMatrix();
+    //Tableau pour stocker les sommets du cube et leur couleur
+    Point pCube[8]={
+        {-0.5,-0.5, 0.5},
+        { 0.5, -0.5, 0.5},
+        { 0.5, -0.5, -0.5},
+        { -0.5, -0.5, -0.5},
+        { -0.5,0.5, 0.5},
+        { 0.5, 0.5, 0.5},
+        { 0.5, 0.5, -0.5},
+        { -0.5, 0.5, -0.5}};
+
+    //Tableau pour stocker les indices des sommets par face pour le cube
+    int fCube[6][4]={
+      {0,1,2,3},//face envers endroit={0,3,2,1}
+      {0,1,5,4},
+      {1,2,6,5},
+      {2,3,7,6},
+      {0,4,7,3},
+      {4,5,6,7}};
+
+    glScalef(largeur, hauteur, longueur);
+
+    // Dessin du cube
+    for (int i=0;i<6;i++)
+    {
+        glBegin(GL_POLYGON);
+        for (int j=0;j<4;j++){
+            glVertex3f(pCube[fCube[i][j]].x,pCube[fCube[i][j]].y,pCube[fCube[i][j]].z);
+        }
+        glEnd();
+    }
+    glPopMatrix();
+}
+
