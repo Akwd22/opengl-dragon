@@ -13,6 +13,7 @@
 #endif
 
 #include "consts.h"
+#include "formes.h"
 
 using namespace std;
 
@@ -179,6 +180,35 @@ void displayCamera()
     glRotatef(angleCameraX, 1.0, 0.0, 0.0);
 }
 
+/**
+ * @brief Afficher et placer le repère.
+ */
+void displayRepere()
+{
+    // Axe X en rouge.
+    glBegin(GL_LINES);
+        glColor3f(1.0, 0.0, 0.0);
+    	glVertex3i(0, 0, 0);
+    	glVertex3i(2, 0, 0);
+    glEnd();
+
+    // Axe Y en vert.
+    glBegin(GL_LINES);
+    	glColor3f(0.0, 1.0, 0.0);
+    	glVertex3i(0, 0, 0);
+    	glVertex3i(0, 2, 0);
+    glEnd();
+
+    // Axe Z en bleu.
+    glBegin(GL_LINES);
+    	glColor3f(0.0, 0.0, 1.0);
+    	glVertex3i(0, 0, 0);
+    	glVertex3i(0, 0, 2);
+    glEnd();
+
+    glColor3f(1.0, 1.0, 1.0);
+}
+
 /* --------------------------- Fonctions de rappel -------------------------- */
 
 /**
@@ -191,8 +221,13 @@ void displayHandler()
     glShadeModel(GL_SMOOTH);
 
     displayCamera();
+    displayRepere();
 
-    glutSolidTeapot(1.0);
+    //glutSolidTeapot(1.0);
+
+    glPushMatrix();
+        sphere(1);
+    glPopMatrix();
 
     glFlush();
     glutSwapBuffers();
