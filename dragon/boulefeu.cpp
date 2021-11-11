@@ -19,9 +19,12 @@ namespace boulefeu
 
     void draw()
     {
+        if (!isAnimating) return;
+
         glPushMatrix();
             tickAnimation();
 
+            // Lumière source ponctuelle jaune représentant la luminescence de la boule.
             GLfloat position[] = {0.0, 0.0, -1.0, 1.0};
             GLfloat diffuse[] = {0.96, 0.88, 0.43, 1.0};
             GLfloat specular[] = {0.96, 0.88, 0.43, 1.0};
@@ -29,8 +32,13 @@ namespace boulefeu
             glLightfv(GL_LIGHT0, GL_POSITION, position);
             glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
             glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-            glEnable(GL_LIGHT0);
 
+            // Atténuation de l'intensité lumineuse plus la boule s'éloigne.
+            glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0);
+            glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.4);
+            glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.4);
+
+            // Afficher une sphère totalement éclairée.
             glDisable(GL_LIGHTING);
                 sphere(RAYON);
             glEnable(GL_LIGHTING);
@@ -46,12 +54,14 @@ namespace boulefeu
     {
         isAnimating = true;
         position = Point();
+        glEnable(GL_LIGHT0);
     }
 
     void stopAnimation()
     {
         isAnimating = false;
         position = Point();
+        glDisable(GL_LIGHT0);
     }
 
     void tickAnimation()
