@@ -14,6 +14,7 @@
 
 #include "consts.h"
 #include "formes.h"
+#include "dragon/boulefeu.h"
 
 using namespace std;
 
@@ -156,6 +157,7 @@ void initGl()
     glPointSize(2.0);
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
 }
 
 /* ------------------------ Fonctions de dispositions ----------------------- */
@@ -226,7 +228,32 @@ void displayHandler()
     //glutSolidTeapot(1.0);
 
     glPushMatrix();
-        sphere(1);
+        glutSolidCube(0.5);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(1.0, 0.0, 1.0);
+        glutSolidCube(0.5);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(1.0, 0.0, -1.0);
+        glutSolidCube(0.5);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(1.0, 1.0, 0.0);
+        glutSolidCube(0.5);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(1.0, -1.0, 0.0);
+        glutSolidCube(0.5);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(1.0, 0.0, 0.0);
+        boulefeu::draw();
     glPopMatrix();
 
     glFlush();
@@ -284,6 +311,9 @@ void keyboardHandler(unsigned char touche, int x, int y)
     case 'a':
         glPolygonMode(GL_FRONT, GL_FILL);
         glPolygonMode(GL_FRONT, GL_LINE);
+        break;
+    case ' ': // Animation boule de feu.
+        boulefeu::toggleAnimation();
         break;
     }
 
@@ -381,4 +411,8 @@ void specialHandler(int touche, int x, int y)
  * @brief Fonction de rappel lorsque inactif.
  * Effectuer les animations automatiques des objets.
  */
-void idleHandler(){};
+void idleHandler()
+{
+    boulefeu::tickAnimation();
+    glutPostRedisplay();
+};
