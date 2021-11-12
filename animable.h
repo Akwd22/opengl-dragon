@@ -3,15 +3,15 @@
 
 class Animable
 {
-    public:
-        Animable();
-        void toggleAnimation();
-        void playAnimation();
-        void stopAnimation();
-        void tickAnimation();
+public:
+    Animable();
+    void toggleAnimation();
+    void playAnimation();
+    void stopAnimation();
+    void tickAnimation();
 
-    protected:
-        bool isAnimating;
+protected:
+    bool isAnimating;
 };
 
 #endif // ANIMABLE_H

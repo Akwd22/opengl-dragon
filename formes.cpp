@@ -14,6 +14,11 @@
 
 using namespace std;
 
+/**
+ * @brief Créer une coordonnée de texture à partir d'un point d'une sphère.
+ * @param p Point de la sphère.
+ * @param rayon Rayon de la sphère.
+ */
 void sphereTexCoord(const Point & p, const double rayon)
 {
     float angle = 0.5 * atan2(p.z / rayon, p.x / rayon) / M_PI + 0.5;

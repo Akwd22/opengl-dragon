@@ -7,8 +7,10 @@
 #include "textures.h"
 #include "utils.h"
 
+/// Nombre de textures total chargées.
 #define NOMBRE_TEXTURES 2
 
+/// Identifiants des textures générées.
 unsigned int texIds[NOMBRE_TEXTURES];
 
 void initTextures()

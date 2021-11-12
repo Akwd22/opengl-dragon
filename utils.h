@@ -5,12 +5,21 @@
 
 using namespace std;
 
-typedef struct {
+typedef struct
+{
+    /// Largeur de l'image.
     unsigned int largeur = 0;
+    /// Hauteur de l'image.
     unsigned int hauteur = 0;
-    unsigned char * texels = nullptr;
+    /// Tableau 1D de taille @p largeur * @p hauteur * 3 stockant la valeur de chaque pixel de l'image.
+    unsigned char *texels = nullptr;
 } TTexture;
 
-TTexture loadJpeg(const string & path);
+/**
+ * @brief Charger en mémoire une image jpeg.
+ * @param path Chemin d'accès de l'image.
+ * @return Données de l'image chargée.
+ */
+TTexture loadJpeg(const string &path);
 
 #endif // UTILS_H_INCLUDED
