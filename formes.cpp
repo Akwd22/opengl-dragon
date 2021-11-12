@@ -69,7 +69,7 @@ void sphere(const double rayon)
     }
 }
 
-void parallelepipede(const double longueur, const double largeur, const double hauteur) {
+void parallelepipede(const double x, const double y, const double z) {
     glPushMatrix();
     //Tableau pour stocker les sommets du cube et leur couleur
     Point pCube[8]={
@@ -91,7 +91,7 @@ void parallelepipede(const double longueur, const double largeur, const double h
       {0,4,7,3},
       {4,5,6,7}};
 
-    glScalef(largeur, hauteur, longueur);
+    glScalef(x, y, z);
 
     // Dessin du cube
     for (int i=0;i<6;i++)
