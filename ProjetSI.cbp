@@ -49,8 +49,12 @@
 		<Unit filename="animable.h" />
 		<Unit filename="consts.h" />
 		<Unit filename="cube.cpp" />
+		<Unit filename="dragon/ailes.cpp" />
+		<Unit filename="dragon/ailes.h" />
 		<Unit filename="dragon/boulefeu.cpp" />
 		<Unit filename="dragon/boulefeu.h" />
+		<Unit filename="dragon/corps.cpp" />
+		<Unit filename="dragon/corps.h" />
 		<Unit filename="facette.cpp" />
 		<Unit filename="facette.h" />
 		<Unit filename="formes.cpp" />
