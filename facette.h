@@ -18,7 +18,13 @@ public:
     /// Point haut-gauche.
     Point &p4;
 
-    /// Constructeur à partir des 4 points de la facette.
+    /**
+     * @brief Constructeur à partir des 4 points de la facette.
+     * @param p1 Point bas-gauche.
+     * @param p2 Point bas-droit.
+     * @param p3 Point haut-droit.
+     * @param p4 Point haut-gauche.
+     */
     Facette(Point &p1, Point &p2, Point &p3, Point &p4);
 };
 
