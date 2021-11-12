@@ -1,0 +1,1 @@
+Explication application texture sur sphère : https://stackoverflow.com/a/44234609

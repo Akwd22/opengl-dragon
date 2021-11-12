@@ -14,10 +14,17 @@
 
 using namespace std;
 
+void sphereTexCoord(const Point & p, const double rayon)
+{
+    float angle = 0.5 * atan2(p.z / rayon, p.x / rayon) / M_PI + 0.5;
+    float hauteur = 0.5 * p.y / rayon + 0.5;
+    glTexCoord2f(angle, hauteur);
+}
+
 void sphere(const double rayon)
 {
-    #define NB_MERIDIENS 16
-    #define NB_PARALLELES 14
+    #define NB_MERIDIENS 24
+    #define NB_PARALLELES 12
 
     // Points.
     vector<Point> points;
@@ -61,9 +68,16 @@ void sphere(const double rayon)
     for (Facette f : facettes)
     {
         glBegin(GL_POLYGON);
+            sphereTexCoord(f.p1, rayon);
             glVertex3d(f.p1.x, f.p1.y, f.p1.z);
+
+            sphereTexCoord(f.p2, rayon);
             glVertex3d(f.p2.x, f.p2.y, f.p2.z);
+
+            sphereTexCoord(f.p3, rayon);
             glVertex3d(f.p3.x, f.p3.y, f.p3.z);
+
+            sphereTexCoord(f.p4, rayon);
             glVertex3d(f.p4.x, f.p4.y, f.p4.z);
         glEnd();
     }
