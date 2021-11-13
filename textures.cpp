@@ -17,7 +17,6 @@ void initTextures()
 {
     TTexture textureFeu = loadJpeg("textures/feu.jpg");
     TTexture textureOeil = loadJpeg("textures/oeil.jpg");
-    TTexture textureTerre = loadJpeg("textures/terre.jpg");
 
     glGenTextures(2, texIds);
 
@@ -38,15 +37,6 @@ void initTextures()
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-    // Charger la texture du globe terrestre.
-    glBindTexture(GL_TEXTURE_2D, texIds[2]);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureTerre.largeur, textureTerre.hauteur, 0, GL_RGB, GL_UNSIGNED_BYTE, textureTerre.texels);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 }
 
 void setTexture(const unsigned int textureId)

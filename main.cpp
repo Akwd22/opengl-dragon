@@ -9,20 +9,18 @@
 
 #ifdef __APPLE__
 #include <GLUT/glut.h> // Pour Mac OS X.
+#include <GLUT/freeglut.h>
 #else
 #include <GL/glut.h> // Pour les autres systèmes.
+#include <GL/freeglut.h>
 #endif
 
-#include <GL/freeglut.h>
-
-#include "consts.h"
+#include "textures.h"
 #include "formes.h"
-#include "utils.h"
-#include "dragon/boulefeu.h"
 #include "dragon/corps.h"
 #include "dragon/ailes.h"
 #include "dragon/tete.h"
-#include "textures.h"
+#include "dragon/boulefeu.h"
 
 using namespace std;
 
@@ -55,6 +53,8 @@ void initGl();
 
 void displayCamera();
 void displayRepere();
+void displaySpot();
+void displayPlateforme();
 
 /* -------------------------- Fonctions de rappels -------------------------- */
 
@@ -103,13 +103,11 @@ float angleCameraStep = 1.0;
 /*                                    Main                                    */
 /* -------------------------------------------------------------------------- */
 
-#if MAIN_CUBE == 0
 int main(int argc, char **argv)
 {
     initGlut(&argc, argv);
     return 0;
 }
-#endif // MAIN_CUBE
 
 /* -------------------------------------------------------------------------- */
 /*                               Implémentations                              */
@@ -156,10 +154,9 @@ void initGl()
     glClearColor(0.0, 0.0, 0.0, 0.0); // Couleur du fond.
     glColor3f(1.0, 1.0, 1.0);         // Couleur des tracés.
 
-    glPointSize(2.0);
-
     initTextures();
 
+    // Paramètres OpenGL.
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
@@ -167,9 +164,7 @@ void initGl()
 
 /* ------------------------ Fonctions de dispositions ----------------------- */
 
-/**
- * @brief Afficher et placer la caméra.
- */
+/// Afficher et placer la caméra.
 void displayCamera()
 {
     // Zoom de la caméra.
@@ -187,9 +182,7 @@ void displayCamera()
     glRotatef(angleCameraX, 1.0, 0.0, 0.0);
 }
 
-/**
- * @brief Afficher et placer le repère.
- */
+/// Afficher et placer le repère.
 void displayRepere()
 {
     bool lightingEnabled = glIsEnabled(GL_LIGHTING);
@@ -198,55 +191,58 @@ void displayRepere()
 
     // Axe X en rouge.
     glBegin(GL_LINES);
-        glColor3f(1.0, 0.0, 0.0);
-    	glVertex3i(0, 0, 0);
-    	glVertex3i(3, 0, 0);
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex3i(0, 0, 0);
+    glVertex3i(3, 0, 0);
     glEnd();
 
     // Axe Y en vert.
     glBegin(GL_LINES);
-    	glColor3f(0.0, 1.0, 0.0);
-    	glVertex3i(0, 0, 0);
-    	glVertex3i(0, 3, 0);
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex3i(0, 0, 0);
+    glVertex3i(0, 3, 0);
     glEnd();
 
     // Axe Z en bleu.
     glBegin(GL_LINES);
-    	glColor3f(0.0, 0.0, 1.0);
-    	glVertex3i(0, 0, 0);
-    	glVertex3i(0, 0, 3);
+    glColor3f(0.0, 0.0, 1.0);
+    glVertex3i(0, 0, 0);
+    glVertex3i(0, 0, 3);
     glEnd();
 
     glColor3f(1.0, 1.0, 1.0);
 
-    if (lightingEnabled) glEnable(GL_LIGHTING);
+    if (lightingEnabled)
+        glEnable(GL_LIGHTING);
 }
 
+/// Afficher un spot lumineux au-dessus du dragon.
 void displaySpot()
 {
     glPushMatrix();
-        GLfloat position[] = {0.0, 5.0, 0.0, 1.0};
-        GLfloat direction[] = {0.0, -1.0, 0.0};
-        GLfloat color[] = {1.0, 0.6, 0.0, 1.0};
+    GLfloat position[] = {0.0, 5.0, 0.0, 1.0};
+    GLfloat direction[] = {0.0, -1.0, 0.0};
+    GLfloat color[] = {1.0, 0.6, 0.0, 1.0};
 
-        glLightfv(GL_LIGHT7, GL_POSITION, position);
-        glLightfv(GL_LIGHT7, GL_SPOT_DIRECTION, direction);
-        glLightf(GL_LIGHT7, GL_SPOT_CUTOFF, 90.0);
-        glLightf(GL_LIGHT7, GL_SPOT_EXPONENT, 5.0);
+    glLightfv(GL_LIGHT7, GL_POSITION, position);
+    glLightfv(GL_LIGHT7, GL_SPOT_DIRECTION, direction);
+    glLightf(GL_LIGHT7, GL_SPOT_CUTOFF, 90.0);
+    glLightf(GL_LIGHT7, GL_SPOT_EXPONENT, 5.0);
 
-        glLightfv(GL_LIGHT7, GL_AMBIENT, color);
-        glLightfv(GL_LIGHT7, GL_DIFFUSE, color);
+    glLightfv(GL_LIGHT7, GL_AMBIENT, color);
+    glLightfv(GL_LIGHT7, GL_DIFFUSE, color);
 
-        glEnable(GL_LIGHT7);
+    glEnable(GL_LIGHT7);
     glPopMatrix();
 }
 
+/// Afficher une plateforme circulaire sous le dragon.
 void displayPlateforme()
 {
     glPushMatrix();
-        glTranslated(0, -2, 0);
-        glRotated(90, 1, 0, 0);
-        glutSolidCylinder(6, 0.1, 30, 30);
+    glTranslatef(0.0, -2.0, 0.0);
+    glRotatef(90.0, 1.0, 0.0, 0.0);
+    glutSolidCylinder(6.0, 0.1, 30.0, 30.0);
     glPopMatrix();
 }
 
@@ -268,9 +264,9 @@ void displayHandler()
     displayPlateforme();
 
     glPushMatrix();
-        corps::draw();
-        ailes::draw();
-        tete::draw();
+    corps::draw();
+    ailes::draw();
+    tete::draw();
     glPopMatrix();
 
     glFlush();

@@ -20,8 +20,11 @@ namespace tete
     /// L'animation est-telle en cours ?
     bool isAnimating = false;
 
+    /// Phase où la gueule du dragon s'ouvre.
     bool phaseOuvertureGueule = false;
+    /// Phase où la boule de feu est générée.
     bool phaseBouleFeu = false;
+    /// Phase où la gueule du dragon se ferme.
     bool phaseFermetureGueule = false;
 
     /// Angle actuelle d'ouverture de la gueule.

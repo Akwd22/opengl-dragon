@@ -3,9 +3,7 @@
 
 #include "point.h"
 
-/**
- * @brief Classe représentant une facette à 4 points.
- */
+/// Classe représentant une facette à 4 points.
 class Facette
 {
 public:

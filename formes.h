@@ -1,3 +1,8 @@
+/**
+ * @file formes.h
+ * @brief Fichier comportant des fonctions permettant de dessiner des formes basiques.
+ */
+
 #ifndef FORMES_H_INCLUDED
 #define FORMES_H_INCLUDED
 

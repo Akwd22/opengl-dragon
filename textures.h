@@ -1,3 +1,8 @@
+/**
+ * @file textures.h
+ * @brief Fichier proposant des fonctions permettant de facilement gérer les textures OpenGL.
+ */
+
 #ifndef TEXTURES_H_INCLUDED
 #define TEXTURES_H_INCLUDED
 

@@ -45,10 +45,6 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="animable.cpp" />
-		<Unit filename="animable.h" />
-		<Unit filename="consts.h" />
-		<Unit filename="cube.cpp" />
 		<Unit filename="dragon/ailes.cpp" />
 		<Unit filename="dragon/ailes.h" />
 		<Unit filename="dragon/boulefeu.cpp" />

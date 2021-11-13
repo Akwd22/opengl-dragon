@@ -1,3 +1,8 @@
+/**
+ * @file utils.h
+ * @brief Fichier proposant des fonctions utilitaires, comme le chargement d'image jpeg.
+ */
+
 #ifndef UTILS_H_INCLUDED
 #define UTILS_H_INCLUDED
 
@@ -18,7 +23,7 @@ typedef struct
 /**
  * @brief Charger en mémoire une image jpeg.
  * @param path Chemin d'accès de l'image.
- * @return Données de l'image chargée.
+ * @return Données de l'image chargée dans un tableau 1D.
  */
 TTexture loadJpeg(const string &path);
 

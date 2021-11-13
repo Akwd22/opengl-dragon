@@ -1,3 +1,8 @@
+/**
+ * @file boulefeu.h
+ * @brief Fichier permettant de dessiner la boule de feu et gérer son animation.
+ */
+
 #ifndef BOULEFEU_H_INCLUDED
 #define BOULEFEU_H_INCLUDED
 

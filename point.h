@@ -1,9 +1,7 @@
 #ifndef POINT_H
 #define POINT_H
 
-/**
- * @brief Classe représentant un point à 3 coordonnées.
- */
+/// Classe représentant un point à 3 coordonnées.
 class Point
 {
 public:
