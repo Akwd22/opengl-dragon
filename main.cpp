@@ -5,7 +5,6 @@
  */
 
 #include <iostream>
-#include <vector>
 
 #ifdef __APPLE__
 #include <GLUT/glut.h> // Pour Mac OS X.
@@ -27,9 +26,9 @@ using namespace std;
 
 /*
 * TODO :
-*   - Modéliser le dragon.
+*   # Modéliser le dragon.
 *   # Modéliser au moins 1 primitive à partir de sa représentation paramétrique.
-*   / Utiliser au moins 2 textures : une plaquée sur une face, l'autre enroulée autour d'une primitive.
+*   - Utiliser au moins 2 textures : une plaquée sur une face, l'autre enroulée autour d'une primitive.
 *   # Gérer au moins 2 types de lumières.
 *   # Zoomer la caméra avec les touches 'z' et 'Z'.
 *   # Touches directionnelles :
@@ -38,7 +37,7 @@ using namespace std;
 *       * tourner autour du dragon par le bas (flèche haute);
 *       * tourner autour du dragon par le haut (flèche basse).
 *   # Au moins 1 animation manuelle avec les touches du clavier.
-*   - Au moins 1 animation automatique.
+*   # Au moins 1 animation automatique.
 */
 
 /* -------------------------------------------------------------------------- */
@@ -192,23 +191,23 @@ void displayRepere()
 
     // Axe X en rouge.
     glBegin(GL_LINES);
-    glColor3f(1.0, 0.0, 0.0);
-    glVertex3i(0, 0, 0);
-    glVertex3i(3, 0, 0);
+        glColor3f(1.0, 0.0, 0.0);
+        glVertex3i(0, 0, 0);
+        glVertex3i(3, 0, 0);
     glEnd();
 
     // Axe Y en vert.
     glBegin(GL_LINES);
-    glColor3f(0.0, 1.0, 0.0);
-    glVertex3i(0, 0, 0);
-    glVertex3i(0, 3, 0);
+        glColor3f(0.0, 1.0, 0.0);
+        glVertex3i(0, 0, 0);
+        glVertex3i(0, 3, 0);
     glEnd();
 
     // Axe Z en bleu.
     glBegin(GL_LINES);
-    glColor3f(0.0, 0.0, 1.0);
-    glVertex3i(0, 0, 0);
-    glVertex3i(0, 0, 3);
+        glColor3f(0.0, 0.0, 1.0);
+        glVertex3i(0, 0, 0);
+        glVertex3i(0, 0, 3);
     glEnd();
 
     glColor3f(1.0, 1.0, 1.0);
@@ -221,19 +220,19 @@ void displayRepere()
 void displaySpot()
 {
     glPushMatrix();
-    GLfloat position[] = {0.0, 5.0, 0.0, 1.0};
-    GLfloat direction[] = {0.0, -1.0, 0.0};
-    GLfloat color[] = {1.0, 0.6, 0.0, 1.0};
+        GLfloat position[] = {0.0, 5.0, 0.0, 1.0};
+        GLfloat direction[] = {0.0, -1.0, 0.0};
+        GLfloat color[] = {1.0, 0.6, 0.0, 1.0};
 
-    glLightfv(GL_LIGHT7, GL_POSITION, position);
-    glLightfv(GL_LIGHT7, GL_SPOT_DIRECTION, direction);
-    glLightf(GL_LIGHT7, GL_SPOT_CUTOFF, 90.0);
-    glLightf(GL_LIGHT7, GL_SPOT_EXPONENT, 5.0);
+        glLightfv(GL_LIGHT7, GL_POSITION, position);
+        glLightfv(GL_LIGHT7, GL_SPOT_DIRECTION, direction);
+        glLightf(GL_LIGHT7, GL_SPOT_CUTOFF, 90.0);
+        glLightf(GL_LIGHT7, GL_SPOT_EXPONENT, 5.0);
 
-    glLightfv(GL_LIGHT7, GL_AMBIENT, color);
-    glLightfv(GL_LIGHT7, GL_DIFFUSE, color);
+        glLightfv(GL_LIGHT7, GL_AMBIENT, color);
+        glLightfv(GL_LIGHT7, GL_DIFFUSE, color);
 
-    glEnable(GL_LIGHT7);
+        glEnable(GL_LIGHT7);
     glPopMatrix();
 }
 
@@ -241,9 +240,9 @@ void displaySpot()
 void displayPlateforme()
 {
     glPushMatrix();
-    glTranslatef(0.0, -2.0, 0.0);
-    glRotatef(90.0, 1.0, 0.0, 0.0);
-    glutSolidCylinder(6.0, 0.1, 30.0, 30.0);
+        glTranslatef(0.0, -2.0, 0.0);
+        glRotatef(90.0, 1.0, 0.0, 0.0);
+        glutSolidCylinder(6.0, 0.1, 30.0, 30.0);
     glPopMatrix();
 }
 
@@ -265,10 +264,10 @@ void displayHandler()
     displayPlateforme();
 
     glPushMatrix();
-    corps::draw();
-    ailes::draw();
-    tete::draw();
-    pattes::draw();
+        corps::draw();
+        ailes::draw();
+        tete::draw();
+        pattes::draw();
     glPopMatrix();
 
     glFlush();
@@ -302,34 +301,34 @@ void keyboardHandler(unsigned char touche, int x, int y)
 
     switch (touche)
     {
-    case 'Z': // Zoomer la caméra.
-        fovCamera -= fovCameraStep;
-        break;
-    case 'z': // Dézoomer la caméra.
-        fovCamera += fovCameraStep;
-        break;
-    case 'p': // Affichage mode plein.
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        break;
-    case 'f': // Affichage mode fil de fer.
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        break;
-    case 's': // Affichage en mode sommets seuls.
-        glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-        break;
-    case 'd':
-        glEnable(GL_DEPTH_TEST);
-        break;
-    case 'D':
-        glDisable(GL_DEPTH_TEST);
-        break;
-    case 'a':
-        glPolygonMode(GL_FRONT, GL_FILL);
-        glPolygonMode(GL_FRONT, GL_LINE);
-        break;
-    case ' ': // Animation boule de feu.
-        tete::toggleAnimation();
-        break;
+        case 'Z': // Zoomer la caméra.
+            fovCamera -= fovCameraStep;
+            break;
+        case 'z': // Dézoomer la caméra.
+            fovCamera += fovCameraStep;
+            break;
+        case 'p': // Affichage mode plein.
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            break;
+        case 'f': // Affichage mode fil de fer.
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            break;
+        case 's': // Affichage en mode sommets seuls.
+            glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+            break;
+        case 'd':
+            glEnable(GL_DEPTH_TEST);
+            break;
+        case 'D':
+            glDisable(GL_DEPTH_TEST);
+            break;
+        case 'a':
+            glPolygonMode(GL_FRONT, GL_FILL);
+            glPolygonMode(GL_FRONT, GL_LINE);
+            break;
+        case ' ': // Animation boule de feu.
+            tete::toggleAnimation();
+            break;
     }
 
     glutPostRedisplay();
@@ -344,8 +343,8 @@ void keyboardHandler(unsigned char touche, int x, int y)
  */
 void mouseHandler(int bouton, int etat, int x, int y)
 {
-#define GLUT_SCROLL_UP 3
-#define GLUT_SCROLL_DOWN 4
+    #define GLUT_SCROLL_UP 3
+    #define GLUT_SCROLL_DOWN 4
 
     cout << "Mouse button pressed: " << bouton << " with state: " << etat << " at X: " << x << " Y: " << y << endl;
 
@@ -353,18 +352,16 @@ void mouseHandler(int bouton, int etat, int x, int y)
 
     switch (bouton)
     {
-    case GLUT_LEFT_BUTTON:
-        oldY = y;
-        oldX = x;
-        break;
-    case GLUT_SCROLL_UP: // Zoomer la caméra.
-        if (etat == GLUT_UP)
-            fovCamera -= fovCameraStep;
-        break;
-    case GLUT_SCROLL_DOWN: // Dézoomer la caméra.
-        if (etat == GLUT_UP)
-            fovCamera += fovCameraStep;
-        break;
+        case GLUT_LEFT_BUTTON:
+            oldY = y;
+            oldX = x;
+            break;
+        case GLUT_SCROLL_UP: // Zoomer la caméra.
+            if (etat == GLUT_UP) fovCamera -= fovCameraStep;
+            break;
+        case GLUT_SCROLL_DOWN: // Dézoomer la caméra.
+            if (etat == GLUT_UP) fovCamera += fovCameraStep;
+            break;
     }
 
     glutPostRedisplay();
@@ -381,10 +378,10 @@ void motionHandler(int x, int y)
 
     switch (mousePressedButton)
     {
-    case GLUT_LEFT_BUTTON: // Rotationner la caméra.
-        angleCameraY += x - oldX;
-        angleCameraX += y - oldY;
-        break;
+        case GLUT_LEFT_BUTTON: // Rotationner la caméra.
+            angleCameraY += x - oldX;
+            angleCameraX += y - oldY;
+            break;
     }
 
     oldY = y;
@@ -405,18 +402,18 @@ void specialHandler(int touche, int x, int y)
 
     switch (touche)
     {
-    case GLUT_KEY_LEFT: // Rotationner la caméra à droite.
-        angleCameraY -= angleCameraStep;
-        break;
-    case GLUT_KEY_RIGHT: // Rotationner la caméra à gauche.
-        angleCameraY += angleCameraStep;
-        break;
-    case GLUT_KEY_UP: // Rotationner la caméra en bas.
-        angleCameraX -= angleCameraStep;
-        break;
-    case GLUT_KEY_DOWN: // Rotationner la caméra en haut.
-        angleCameraX += angleCameraStep;
-        break;
+        case GLUT_KEY_LEFT: // Rotationner la caméra à droite.
+            angleCameraY -= angleCameraStep;
+            break;
+        case GLUT_KEY_RIGHT: // Rotationner la caméra à gauche.
+            angleCameraY += angleCameraStep;
+            break;
+        case GLUT_KEY_UP: // Rotationner la caméra en bas.
+            angleCameraX -= angleCameraStep;
+            break;
+        case GLUT_KEY_DOWN: // Rotationner la caméra en haut.
+            angleCameraX += angleCameraStep;
+            break;
     }
 
     glutPostRedisplay();
@@ -430,5 +427,6 @@ void idleHandler()
 {
     tete::tickAnimation();
     boulefeu::tickAnimation();
+
     glutPostRedisplay();
 };

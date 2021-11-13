@@ -19,7 +19,7 @@ using namespace std;
  * @param p Point de la sphère.
  * @param rayon Rayon de la sphère.
  */
-void sphereTexCoord(const Point & p, const double rayon)
+void sphereTexCoord(const Point &p, const double rayon)
 {
     float angle = 0.5 * atan2(p.z / rayon, p.x / rayon) / M_PI + 0.5;
     float hauteur = 0.5 * p.y / rayon + 0.5;
@@ -60,10 +60,10 @@ void sphere(const double rayon)
             unsigned int pn = (p + 1) % NB_PARALLELES;
             unsigned int mn = (m + 1) % NB_MERIDIENS;
 
-            Point & p1 = points[p * NB_MERIDIENS + m];
-            Point & p2 = points[p * NB_MERIDIENS + mn];
-            Point & p3 = points[pn * NB_MERIDIENS + mn];
-            Point & p4 = points[pn * NB_MERIDIENS + m];
+            Point &p1 = points[p * NB_MERIDIENS + m];
+            Point &p2 = points[p * NB_MERIDIENS + mn];
+            Point &p3 = points[pn * NB_MERIDIENS + mn];
+            Point &p4 = points[pn * NB_MERIDIENS + m];
 
             facettes.push_back(Facette(p1, p2, p3, p4));
         }
@@ -88,41 +88,42 @@ void sphere(const double rayon)
     }
 }
 
-void parallelepipede(const double x, const double y, const double z) {
+void parallelepipede(const double x, const double y, const double z)
+{
     glPushMatrix();
-    //Tableau pour stocker les sommets du cube et leur couleur
-    Point pCube[8]={
-        {-0.5,-0.5, 0.5},
-        { 0.5, -0.5, 0.5},
-        { 0.5, -0.5, -0.5},
-        { -0.5, -0.5, -0.5},
-        { -0.5,0.5, 0.5},
-        { 0.5, 0.5, 0.5},
-        { 0.5, 0.5, -0.5},
-        { -0.5, 0.5, -0.5}};
+        // Tableau pour stocker les sommets du cube.
+        Point pCube[8] = {
+            {-0.5, -0.5, 0.5},
+            {0.5, -0.5, 0.5},
+            {0.5, -0.5, -0.5},
+            {-0.5, -0.5, -0.5},
+            {-0.5, 0.5, 0.5},
+            {0.5, 0.5, 0.5},
+            {0.5, 0.5, -0.5},
+            {-0.5, 0.5, -0.5}};
 
-    //Tableau pour stocker les indices des sommets par face pour le cube
-    int fCube[6][4]={
-      {0,1,2,3},//face envers endroit={0,3,2,1}
-      {0,1,5,4},
-      {1,2,6,5},
-      {2,3,7,6},
-      {0,4,7,3},
-      {4,5,6,7}};
+        // Tableau pour stocker les indices des sommets par face pour le cube.
+        int fCube[6][4] = {
+            {0, 1, 2, 3},
+            {0, 1, 5, 4},
+            {1, 2, 6, 5},
+            {2, 3, 7, 6},
+            {0, 4, 7, 3},
+            {4, 5, 6, 7}};
 
-    glScalef(x, y, z);
+        glScalef(x, y, z);
 
-    // Dessin du cube
-    for (int i=0;i<6;i++)
-    {
-        glNormal3f(0, 1, 0);
+        // Dessin du cube
+        for (int i = 0; i < 6; i++)
+        {
+            glNormal3f(0, 1, 0);
 
-        glBegin(GL_POLYGON);
-            for (int j=0;j<4;j++){
-                glVertex3f(pCube[fCube[i][j]].x,pCube[fCube[i][j]].y,pCube[fCube[i][j]].z);
-            }
-        glEnd();
-    }
+            glBegin(GL_POLYGON);
+                for (int j = 0; j < 4; j++)
+                {
+                    glVertex3f(pCube[fCube[i][j]].x, pCube[fCube[i][j]].y, pCube[fCube[i][j]].z);
+                }
+            glEnd();
+        }
     glPopMatrix();
 }
-

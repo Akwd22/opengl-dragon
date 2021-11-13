@@ -10,6 +10,7 @@
 
 using namespace std;
 
+/// Structure stockant les pixels d'une image jpeg.
 typedef struct
 {
     /// Largeur de l'image.

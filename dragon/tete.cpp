@@ -11,8 +11,6 @@
 #include "../utils.h"
 #include "../textures.h"
 
-#include <iostream>
-
 #define ANIM_ANGLE_PAS 0.05
 
 namespace tete
@@ -37,13 +35,13 @@ namespace tete
         // Crâne.
         glPushMatrix();
             glTranslatef(0.0, -0.3, 3.5);
-            parallelepipede(0.9,0.7,0.5);
+            parallelepipede(0.9, 0.7, 0.5);
         glPopMatrix();
 
         // Museau.
         glPushMatrix();
             glTranslatef(0.0, -0.4, 3.9);
-            parallelepipede(0.7,0.5,0.4);
+            parallelepipede(0.7, 0.5, 0.4);
         glPopMatrix();
 
         // Mâchoire basse.
@@ -55,13 +53,13 @@ namespace tete
             // Partie gauche.
             glPushMatrix();
                 glTranslatef(0.0, 0.0, 0.0);
-                parallelepipede(0.85,0.2,0.45);
+                parallelepipede(0.85, 0.2, 0.45);
             glPopMatrix();
 
             // Partie droite.
             glPushMatrix();
                 glTranslatef(0.0, 0.0, 0.4);
-                parallelepipede(0.65,0.2,0.35);
+                parallelepipede(0.65, 0.2, 0.35);
             glPopMatrix();
         glPopMatrix();
 
@@ -106,7 +104,7 @@ namespace tete
         glPopMatrix();
     }
 
-   void toggleAnimation()
+    void toggleAnimation()
     {
         if (!isAnimating)
             playAnimation();

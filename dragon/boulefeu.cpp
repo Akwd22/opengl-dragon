@@ -31,28 +31,33 @@ namespace boulefeu
             return;
 
         glPushMatrix();
-        tickAnimation();
+            tickAnimation();
 
-        glScaled(scale, scale, scale);
+            glScaled(scale, scale, scale);
 
-        // Lumière source ponctuelle jaune représentant la luminescence de la boule.
-        GLfloat position[] = {1.0, 1.0, 1.0, 1.0};
-        GLfloat diffuse[] = {0.8, 0.0, 0.0, 1.0};
+            // Lumière source ponctuelle jaune représentant la luminescence de la boule.
+            GLfloat position[] = {1.0, 1.0, 1.0, 1.0};
+            GLfloat diffuse[] = {0.8, 0.0, 0.0, 1.0};
 
-        glLightfv(GL_LIGHT0, GL_POSITION, position);
-        glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+            glLightfv(GL_LIGHT0, GL_POSITION, position);
+            glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
 
-        // Atténuation de l'intensité lumineuse plus la boule s'éloigne.
-        glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0);
-        glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.4);
-        glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.4);
+            // Atténuation de l'intensité lumineuse plus la boule s'éloigne.
+            glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0);
+            glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.4);
+            glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.4);
 
-        // Afficher une sphère totalement éclairée et texturée.
-        setTexture(0); glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-        glDisable(GL_LIGHTING);
-        sphere(RAYON);
-        glEnable(GL_LIGHTING);
-        clearTexture(); glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
+            // Afficher une sphère totalement éclairée et texturée.
+            setTexture(0);
+            glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+            glDisable(GL_LIGHTING);
+                sphere(RAYON);
+            glEnable(GL_LIGHTING);
+
+            clearTexture();
+
+            glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
         glPopMatrix();
     }
 
