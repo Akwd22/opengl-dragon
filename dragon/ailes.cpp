@@ -4,11 +4,26 @@
 #include <GL/glut.h> // Pour les autres systèmes.
 #endif
 
+#include "ailes.h"
 #include "../point.h"
 #include "../formes.h"
+#include "../utils.h"
+#include "../textures.h"
+
+#include <iostream>
+
+#define ANIM_ANGLE_PAS 0.5
 
 namespace ailes
 {
+    /// Phase Ailes Haute
+    bool phaseAileHaute = false;
+    /// Phase Ailes Basse
+    bool phaseAileBasse = true;
+
+    /// Angle actuelle des ailes
+    double angleAile = 0.00;
+
     void aileDroite(){
         //Aile Droite
         // Base
@@ -40,6 +55,26 @@ namespace ailes
         glPushMatrix();
             glTranslatef(2.3,0.20,1);
             parallelepipede(0.10,0.05,0.8);
+        glPopMatrix();
+
+        //Planeur Base
+        glPushMatrix();
+            glRotatef(7,0,0,1);
+            glTranslatef(0.8,0,1);
+            parallelepipede(0.9,0.04,0.8);
+        glPopMatrix();
+
+        //Planeur Milieu
+        glPushMatrix();
+            glTranslatef(1.82,0.18,1.1);
+            parallelepipede(0.9,0.04,0.7);
+        glPopMatrix();
+
+        //Planeur Extension
+        glPushMatrix();
+            glRotatef(-7,0,0,1);
+            glTranslatef(2.7,0.47,1.2);
+            parallelepipede(0.9,0.04,0.6);
         glPopMatrix();
     }
 
@@ -75,13 +110,65 @@ namespace ailes
             glTranslatef(-2.3,0.20,1);
             parallelepipede(0.10,0.05,0.8);
         glPopMatrix();
+
+        //Planeur Base
+        glPushMatrix();
+            glRotatef(-7,0,0,1);
+            glTranslatef(-0.8,0,1);
+            parallelepipede(0.9,0.04,0.8);
+        glPopMatrix();
+
+        //Planeur Milieu
+        glPushMatrix();
+            glTranslatef(-1.82,0.18,1.1);
+            parallelepipede(0.9,0.04,0.7);
+        glPopMatrix();
+
+        //Planeur Extension
+        glPushMatrix();
+            glRotatef(7,0,0,1);
+            glTranslatef(-2.7,0.47,1.2);
+            parallelepipede(0.9,0.04,0.6);
+        glPopMatrix();
     }
 
     void draw()
     {
-        aileDroite();
-        aileGauche();
+        tickAnimation();
+
+        glPushMatrix();
+                glRotatef(angleAile,0,0,1);
+                aileDroite();
+        glPopMatrix();
+
+        glPushMatrix();
+                glRotatef(-(angleAile),0,0,1);
+                aileGauche();
+        glPopMatrix();
     }
 
+    void tickAnimation()
+    {
+        if (phaseAileBasse)
+        {
+            angleAile += ANIM_ANGLE_PAS;
 
+            if (angleAile >= 20)
+            {
+                phaseAileHaute= true;
+                phaseAileBasse = false;
+            }
+        }
+
+        if (phaseAileHaute)
+        {
+            angleAile -= ANIM_ANGLE_PAS;
+
+            if (angleAile <= -20)
+            {
+                phaseAileHaute= false;
+                phaseAileBasse = true;
+            }
+        }
+    }
 }

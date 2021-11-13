@@ -20,6 +20,7 @@
 #include "dragon/corps.h"
 #include "dragon/ailes.h"
 #include "dragon/tete.h"
+#include "dragon/pattes.h"
 #include "dragon/boulefeu.h"
 
 using namespace std;
@@ -267,6 +268,7 @@ void displayHandler()
     corps::draw();
     ailes::draw();
     tete::draw();
+    pattes::draw();
     glPopMatrix();
 
     glFlush();

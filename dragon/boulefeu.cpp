@@ -11,9 +11,9 @@
 #include "../textures.h"
 
 #define RAYON 0.25
-#define ANIM_Z_PAS 0.001
+#define ANIM_Z_PAS 0.008
 #define ANIM_Y_PAS 0.0003
-#define ANIM_SCALE_PAS 0.003
+#define ANIM_SCALE_PAS 0.01
 
 namespace boulefeu
 {

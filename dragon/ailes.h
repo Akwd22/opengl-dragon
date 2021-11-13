@@ -3,6 +3,7 @@
 
 namespace ailes
 {
+    void tickAnimation();
     void draw();
 }
 
