@@ -116,12 +116,26 @@ void parallelepipede(const double x, const double y, const double z)
         // Dessin du cube
         for (int i = 0; i < 6; i++)
         {
-            glNormal3f(0, 1, 0);
+            if (i == 0) glNormal3f(0, -1, 0);   // Face du bas.
+            if (i == 1) glNormal3f(0, 0, 1);    // Face avant.
+            if (i == 2) glNormal3f(1, 0, 0);    // Face droite.
+            if (i == 3) glNormal3f(0, 0, -1);   // Face arrière.
+            if (i == 4) glNormal3f(-1, 0, 0);   // Face gauche.
+            if (i == 5) glNormal3f(0, 1, 0);    // face du haut.
 
             glBegin(GL_POLYGON);
                 for (int j = 0; j < 4; j++)
                 {
-                    glVertex3f(pCube[fCube[i][j]].x, pCube[fCube[i][j]].y, pCube[fCube[i][j]].z);
+                    if (j == 0) glTexCoord2f(0, 0);
+                    if (j == 1) glTexCoord2f(0, 1);
+                    if (j == 2) glTexCoord2f(1, 1);
+                    if (j == 3) glTexCoord2f(1, 0);
+
+                    double x = pCube[fCube[i][j]].x;
+                    double y = pCube[fCube[i][j]].y;
+                    double z = pCube[fCube[i][j]].z;
+
+                    glVertex3f(x, y, z);
                 }
             glEnd();
         }

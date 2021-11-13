@@ -49,15 +49,13 @@ namespace boulefeu
 
             // Afficher une sphère totalement éclairée et texturée.
             setTexture(0);
-            glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+            glColor3f(1.0, 1.0, 1.0);
 
             glDisable(GL_LIGHTING);
                 sphere(RAYON);
             glEnable(GL_LIGHTING);
 
             clearTexture();
-
-            glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
         glPopMatrix();
     }
 

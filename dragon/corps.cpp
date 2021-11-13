@@ -7,6 +7,7 @@
 #include "corps.h"
 #include "../point.h"
 #include "../formes.h"
+#include "../textures.h"
 
 namespace corps
 {
