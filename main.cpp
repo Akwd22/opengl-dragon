@@ -28,7 +28,7 @@ using namespace std;
 * TODO :
 *   # Modéliser le dragon.
 *   # Modéliser au moins 1 primitive à partir de sa représentation paramétrique.
-*   - Utiliser au moins 2 textures : une plaquée sur une face, l'autre enroulée autour d'une primitive.
+*   # Utiliser au moins 2 textures : une plaquée sur une face, l'autre enroulée autour d'une primitive.
 *   # Gérer au moins 2 types de lumières.
 *   # Zoomer la caméra avec les touches 'z' et 'Z'.
 *   # Touches directionnelles :
