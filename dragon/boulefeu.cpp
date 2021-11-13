@@ -36,7 +36,7 @@ namespace boulefeu
         glScaled(scale, scale, scale);
 
         // Lumière source ponctuelle jaune représentant la luminescence de la boule.
-        GLfloat position[] = {0.0, 0.0, 0.0, 1.0};
+        GLfloat position[] = {1.0, 1.0, 1.0, 1.0};
         GLfloat diffuse[] = {0.8, 0.0, 0.0, 1.0};
 
         glLightfv(GL_LIGHT0, GL_POSITION, position);

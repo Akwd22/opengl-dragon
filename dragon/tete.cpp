@@ -79,6 +79,23 @@ namespace tete
 
         clearTexture();
 
+        // Cornes.
+        glPushMatrix();
+            glTranslatef(-0.5, 0.05, 3.1);
+            glRotatef(90, 1, 0, 0);
+            glRotatef(-25, 0, 0, 1);
+            glRotatef(30, 1, 0, 0);
+            parallelepipede(0.1, 0.45, 0.1);
+        glPopMatrix();
+
+        glPushMatrix();
+            glTranslatef(0.5, 0.05, 3.1);
+            glRotatef(-90, 1, 0, 0);
+            glRotatef(-25, 0, 0, 1);
+            glRotatef(30, 1, 0, 0);
+            parallelepipede(0.1, 0.45, 0.1);
+        glPopMatrix();
+
         // Boule de feu (uniquement lors de l'animation).
         glPushMatrix();
             glTranslatef(0, -0.75, 4.0);
@@ -88,7 +105,8 @@ namespace tete
 
    void toggleAnimation()
     {
-        isAnimating ? stopAnimation() : playAnimation();
+        if (!isAnimating)
+            playAnimation();
     }
 
     void playAnimation()
