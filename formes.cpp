@@ -115,10 +115,12 @@ void parallelepipede(const double x, const double y, const double z) {
     // Dessin du cube
     for (int i=0;i<6;i++)
     {
+        glNormal3f(0, 1, 0);
+
         glBegin(GL_POLYGON);
-        for (int j=0;j<4;j++){
-            glVertex3f(pCube[fCube[i][j]].x,pCube[fCube[i][j]].y,pCube[fCube[i][j]].z);
-        }
+            for (int j=0;j<4;j++){
+                glVertex3f(pCube[fCube[i][j]].x,pCube[fCube[i][j]].y,pCube[fCube[i][j]].z);
+            }
         glEnd();
     }
     glPopMatrix();

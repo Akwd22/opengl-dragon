@@ -11,15 +11,19 @@
 #include "../textures.h"
 
 #define RAYON 0.25
-#define ANIM_X_PAS 0.001
+#define ANIM_Z_PAS 0.001
 #define ANIM_Y_PAS 0.0003
+#define ANIM_SCALE_PAS 0.003
 
 namespace boulefeu
 {
     /// L'animation est-telle en cours ?
     bool isAnimating = false;
+
     /// Position actuelle de la boule de feu.
     Point position;
+    /// Scale actuel de la boule de feu.
+    double scale = 0.00;
 
     void draw()
     {
@@ -29,8 +33,10 @@ namespace boulefeu
         glPushMatrix();
         tickAnimation();
 
+        glScaled(scale, scale, scale);
+
         // Lumière source ponctuelle jaune représentant la luminescence de la boule.
-        GLfloat position[] = {0.0, 0.0, -1.0, 1.0};
+        GLfloat position[] = {0.0, 0.0, 0.0, 1.0};
         GLfloat diffuse[] = {0.96, 0.88, 0.43, 1.0};
 
         glLightfv(GL_LIGHT0, GL_POSITION, position);
@@ -42,11 +48,11 @@ namespace boulefeu
         glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.4);
 
         // Afficher une sphère totalement éclairée et texturée.
-        setTexture(0);
+        setTexture(0); glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
         glDisable(GL_LIGHTING);
         sphere(RAYON);
         glEnable(GL_LIGHTING);
-        clearTexture();
+        clearTexture(); glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
         glPopMatrix();
     }
 
@@ -58,14 +64,20 @@ namespace boulefeu
     void playAnimation()
     {
         isAnimating = true;
+
         position = Point();
+        scale = 0.00;
+
         glEnable(GL_LIGHT0);
     }
 
     void stopAnimation()
     {
         isAnimating = false;
+
         position = Point();
+        scale = 0.00;
+
         glDisable(GL_LIGHT0);
     }
 
@@ -74,8 +86,15 @@ namespace boulefeu
         if (!isAnimating)
             return;
 
-        position.x += ANIM_X_PAS;
+        position.z += ANIM_Z_PAS;
         position.y -= ANIM_Y_PAS;
+
+        if (position.z >= 5)
+            stopAnimation();
+
+        if (scale < 1)
+            scale += ANIM_SCALE_PAS;
+
         glTranslatef(position.x, position.y, position.z);
     }
 }

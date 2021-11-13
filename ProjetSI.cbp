@@ -55,6 +55,8 @@
 		<Unit filename="dragon/boulefeu.h" />
 		<Unit filename="dragon/corps.cpp" />
 		<Unit filename="dragon/corps.h" />
+		<Unit filename="dragon/tete.cpp" />
+		<Unit filename="dragon/tete.h" />
 		<Unit filename="facette.cpp" />
 		<Unit filename="facette.h" />
 		<Unit filename="formes.cpp" />

@@ -5,6 +5,7 @@
  */
 
 #include <iostream>
+#include <vector>
 
 #ifdef __APPLE__
 #include <GLUT/glut.h> // Pour Mac OS X.
@@ -12,32 +13,33 @@
 #include <GL/glut.h> // Pour les autres systèmes.
 #endif
 
+#include <GL/freeglut.h>
+
 #include "consts.h"
 #include "formes.h"
+#include "utils.h"
 #include "dragon/boulefeu.h"
+#include "dragon/corps.h"
+#include "dragon/ailes.h"
+#include "dragon/tete.h"
+#include "textures.h"
 
 using namespace std;
 
 /*
 * TODO :
 *   - Modéliser le dragon.
-*   - Modéliser au moins 1 primitive à partir de sa représentation paramétrique.
-*   - Utiliser au moins 2 textures : une plaquée sur une face, l'autre enroulée autour d'une primitive.
-*   - Gérer au moins 2 types de lumières.
+*   # Modéliser au moins 1 primitive à partir de sa représentation paramétrique.
+*   / Utiliser au moins 2 textures : une plaquée sur une face, l'autre enroulée autour d'une primitive.
+*   / Gérer au moins 2 types de lumières.
 *   # Zoomer la caméra avec les touches 'z' et 'Z'.
 *   # Touches directionnelles :
 *       * tourner autour du dragon par la droite (flèche gauche);
 *       * tourner autour du dragon par la gauche (flèche droite);
 *       * tourner autour du dragon par le bas (flèche haute);
 *       * tourner autour du dragon par le haut (flèche basse).
-*   - Au moins 1 animation manuelle avec les touches du clavier.
+*   # Au moins 1 animation manuelle avec les touches du clavier.
 *   - Au moins 1 animation automatique.
-*/
-
-/*
-* NOTE :
-*   - 1 type de lumière au niveau des 2 yeux du dragon.
-*   - 1 type de lumière ambiante.
 */
 
 /* -------------------------------------------------------------------------- */
@@ -52,6 +54,7 @@ void initGl();
 /* ------------------------ Fonctions de dispositions ----------------------- */
 
 void displayCamera();
+void displayRepere();
 
 /* -------------------------- Fonctions de rappels -------------------------- */
 
@@ -85,9 +88,9 @@ int mousePressedButton = -1;
 /* --------------------------------- Caméra --------------------------------- */
 
 /// Angle FOV de la caméra (pour le zoom).
-float fovCamera = 50.0;
+float fovCamera = 60.0;
 /// Pas de modification du FOV de la caméra.
-float fovCameraStep = 1.0;
+float fovCameraStep = 2.0;
 
 /// Angle de rotation caméra autour de l'axe Y.
 float angleCameraY = 0.0;
@@ -125,8 +128,7 @@ void initGlut(int *argc, char **argv)
     // Initialisation fenêtre.
     glutInit(argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
-    glutInitWindowSize(500, 500);
-    glutInitWindowPosition(2200, 200); // TODO : attention remettre la largeur normalement pour un mono-screen.
+    glutInitWindowSize(1000, 500);
     glutCreateWindow("Projet SI");
 
     // Initialiser OpenGL.
@@ -156,8 +158,11 @@ void initGl()
 
     glPointSize(2.0);
 
+    initTextures();
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
+    glEnable(GL_TEXTURE_2D);
 }
 
 /* ------------------------ Fonctions de dispositions ----------------------- */
@@ -170,12 +175,12 @@ void displayCamera()
     // Zoom de la caméra.
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(fovCamera, (float)winWidth / (float)winHeight, 1.0, 10.0);
+    gluPerspective(fovCamera, (float)winWidth / (float)winHeight, 0.5, 20.0);
 
     // Position de la caméra.
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0.0, 0.0, -5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    gluLookAt(0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
     // Rotation de la caméra.
     glRotatef(angleCameraY, 0.0, 1.0, 0.0);
@@ -187,28 +192,34 @@ void displayCamera()
  */
 void displayRepere()
 {
+    bool lightingEnabled = glIsEnabled(GL_LIGHTING);
+
+    glDisable(GL_LIGHTING);
+
     // Axe X en rouge.
     glBegin(GL_LINES);
         glColor3f(1.0, 0.0, 0.0);
     	glVertex3i(0, 0, 0);
-    	glVertex3i(2, 0, 0);
+    	glVertex3i(3, 0, 0);
     glEnd();
 
     // Axe Y en vert.
     glBegin(GL_LINES);
     	glColor3f(0.0, 1.0, 0.0);
     	glVertex3i(0, 0, 0);
-    	glVertex3i(0, 2, 0);
+    	glVertex3i(0, 3, 0);
     glEnd();
 
     // Axe Z en bleu.
     glBegin(GL_LINES);
     	glColor3f(0.0, 0.0, 1.0);
     	glVertex3i(0, 0, 0);
-    	glVertex3i(0, 0, 2);
+    	glVertex3i(0, 0, 3);
     glEnd();
 
     glColor3f(1.0, 1.0, 1.0);
+
+    if (lightingEnabled) glEnable(GL_LIGHTING);
 }
 
 /* --------------------------- Fonctions de rappel -------------------------- */
@@ -225,35 +236,34 @@ void displayHandler()
     displayCamera();
     displayRepere();
 
-    //glutSolidTeapot(1.0);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
 
     glPushMatrix();
-        glutSolidCube(0.5);
+        GLfloat position[] = {0.0, 5.0, 0.0, 1.0};
+        GLfloat direction[] = {0.0, -1.0, 0.0};
+        GLfloat diffuse[] = {1.0, 0.6, 0.0, 1.0};
+
+        glLightfv(GL_LIGHT7, GL_POSITION, position);
+        glLightfv(GL_LIGHT7, GL_SPOT_DIRECTION, direction);
+        glLightf(GL_LIGHT7, GL_SPOT_CUTOFF, 90.0);
+        glLightf(GL_LIGHT7, GL_SPOT_EXPONENT, 5.0);
+
+        glLightfv(GL_LIGHT7, GL_AMBIENT, diffuse);
+        glLightfv(GL_LIGHT7, GL_DIFFUSE, diffuse);
+
+        glEnable(GL_LIGHT7);
     glPopMatrix();
 
     glPushMatrix();
-        glTranslatef(1.0, 0.0, 1.0);
-        glutSolidCube(0.5);
+        glTranslated(0, -2, 0);
+        glRotated(90, 1, 0, 0);
+        glutSolidCylinder(6, 0.1, 30, 30);
     glPopMatrix();
 
     glPushMatrix();
-        glTranslatef(1.0, 0.0, -1.0);
-        glutSolidCube(0.5);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslatef(1.0, 1.0, 0.0);
-        glutSolidCube(0.5);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslatef(1.0, -1.0, 0.0);
-        glutSolidCube(0.5);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslatef(1.0, 0.0, 0.0);
-        boulefeu::draw();
+        corps::draw();
+        ailes::draw();
+        tete::draw();
     glPopMatrix();
 
     glFlush();
@@ -313,7 +323,7 @@ void keyboardHandler(unsigned char touche, int x, int y)
         glPolygonMode(GL_FRONT, GL_LINE);
         break;
     case ' ': // Animation boule de feu.
-        boulefeu::toggleAnimation();
+        tete::toggleAnimation();
         break;
     }
 
@@ -413,6 +423,7 @@ void specialHandler(int touche, int x, int y)
  */
 void idleHandler()
 {
+    tete::tickAnimation();
     boulefeu::tickAnimation();
     glutPostRedisplay();
 };
