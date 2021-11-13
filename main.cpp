@@ -160,6 +160,9 @@ void initGl()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_NORMALIZE);
+
+    glShadeModel(GL_SMOOTH);
 }
 
 /* ------------------------ Fonctions de dispositions ----------------------- */
@@ -255,7 +258,6 @@ void displayPlateforme()
 void displayHandler()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glShadeModel(GL_SMOOTH);
 
     displayCamera();
     displayRepere();
