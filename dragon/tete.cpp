@@ -52,13 +52,13 @@ namespace tete
             // Partie gauche.
             glPushMatrix();
                 glTranslatef(0.0, 0.0, 0.0);
-                parallelepipede(0.85,0.2,0.5);
+                parallelepipede(0.85,0.2,0.45);
             glPopMatrix();
 
             // Partie droite.
             glPushMatrix();
                 glTranslatef(0.0, 0.0, 0.4);
-                parallelepipede(0.7,0.2,0.4);
+                parallelepipede(0.65,0.2,0.35);
             glPopMatrix();
         glPopMatrix();
 

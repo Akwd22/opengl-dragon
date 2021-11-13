@@ -21,6 +21,8 @@ void initTextures()
 
     glGenTextures(2, texIds);
 
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
+
     // Charger la texture de feu.
     glBindTexture(GL_TEXTURE_2D, texIds[0]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureFeu.largeur, textureFeu.hauteur, 0, GL_RGB, GL_UNSIGNED_BYTE, textureFeu.texels);

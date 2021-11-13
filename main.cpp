@@ -31,7 +31,7 @@ using namespace std;
 *   - Modéliser le dragon.
 *   # Modéliser au moins 1 primitive à partir de sa représentation paramétrique.
 *   / Utiliser au moins 2 textures : une plaquée sur une face, l'autre enroulée autour d'une primitive.
-*   / Gérer au moins 2 types de lumières.
+*   # Gérer au moins 2 types de lumières.
 *   # Zoomer la caméra avec les touches 'z' et 'Z'.
 *   # Touches directionnelles :
 *       * tourner autour du dragon par la droite (flèche gauche);
@@ -222,6 +222,34 @@ void displayRepere()
     if (lightingEnabled) glEnable(GL_LIGHTING);
 }
 
+void displaySpot()
+{
+    glPushMatrix();
+        GLfloat position[] = {0.0, 5.0, 0.0, 1.0};
+        GLfloat direction[] = {0.0, -1.0, 0.0};
+        GLfloat color[] = {1.0, 0.6, 0.0, 1.0};
+
+        glLightfv(GL_LIGHT7, GL_POSITION, position);
+        glLightfv(GL_LIGHT7, GL_SPOT_DIRECTION, direction);
+        glLightf(GL_LIGHT7, GL_SPOT_CUTOFF, 90.0);
+        glLightf(GL_LIGHT7, GL_SPOT_EXPONENT, 5.0);
+
+        glLightfv(GL_LIGHT7, GL_AMBIENT, color);
+        glLightfv(GL_LIGHT7, GL_DIFFUSE, color);
+
+        glEnable(GL_LIGHT7);
+    glPopMatrix();
+}
+
+void displayPlateforme()
+{
+    glPushMatrix();
+        glTranslated(0, -2, 0);
+        glRotated(90, 1, 0, 0);
+        glutSolidCylinder(6, 0.1, 30, 30);
+    glPopMatrix();
+}
+
 /* --------------------------- Fonctions de rappel -------------------------- */
 
 /**
@@ -236,29 +264,8 @@ void displayHandler()
     displayCamera();
     displayRepere();
 
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
-
-    glPushMatrix();
-        GLfloat position[] = {0.0, 5.0, 0.0, 1.0};
-        GLfloat direction[] = {0.0, -1.0, 0.0};
-        GLfloat diffuse[] = {1.0, 0.6, 0.0, 1.0};
-
-        glLightfv(GL_LIGHT7, GL_POSITION, position);
-        glLightfv(GL_LIGHT7, GL_SPOT_DIRECTION, direction);
-        glLightf(GL_LIGHT7, GL_SPOT_CUTOFF, 90.0);
-        glLightf(GL_LIGHT7, GL_SPOT_EXPONENT, 5.0);
-
-        glLightfv(GL_LIGHT7, GL_AMBIENT, diffuse);
-        glLightfv(GL_LIGHT7, GL_DIFFUSE, diffuse);
-
-        glEnable(GL_LIGHT7);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslated(0, -2, 0);
-        glRotated(90, 1, 0, 0);
-        glutSolidCylinder(6, 0.1, 30, 30);
-    glPopMatrix();
+    displaySpot();
+    displayPlateforme();
 
     glPushMatrix();
         corps::draw();
