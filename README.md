@@ -38,11 +38,12 @@ This is a small project to learn the basics of OpenGL. The objective was to mode
 <!-- CONTEXT -->
 ## Context
 
-This project is an academic project realized during the **third year** of a **Bachelor** of Computer Science.  
+This project is an academic project made during the **third year** of a **Bachelor** of Computer Science.  
 The development was done by 2 people.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+<!-- BUILT WITH -->
 ## Built With
 
 Entire project was built with C++ and [OpenGL](https://www.opengl.org/) and is only compatible with Linux.
@@ -52,8 +53,10 @@ Entire project was built with C++ and [OpenGL](https://www.opengl.org/) and is o
 <!-- DOCUMENTATION -->
 ## Documentation
 
-You can find documentation such as technical details, instructions, in the folder `docs`.  
+You can find documentation such as technical details, and instructions in the folder `docs`.  
 Doxygen docs can be generated in HTML with script file `doxy/run_doxygen` ([Doxygen](https://doxygen.nl/) must be installed on your system).
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
