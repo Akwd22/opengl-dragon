@@ -4,9 +4,6 @@
 <br />
 <div align="center">
   <h3 align="center">OpenGL Learning Project – Dragon</h3>
-  <p align="center">
-    <a href="#">View Demo (TODO)</a>
-  </p>
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -28,6 +25,7 @@
 
 <div align="center">
   <img src="project-image.png">
+  <i>Might be ugly, but hey, I'm not expert in 3D modeling.</i>
 </div>
 <br />
 
